@@ -184,6 +184,76 @@ $(document).ready(function() {
 		//end the colorChange()
 	}
 
+
+
+
+	
+
+	//before we do time-killer testing, we need to start the storage of data for each available clokan that can possibly be run.
+	var informadata = [];
+	function forstorData() {
+		//how many clockans are we dealing with?
+		var amount = $('.clokan').length;
+		
+		//create an array for each clokan that will store the data on time
+		for (var i = 0; i < amount; i++) {
+			//store this in a global variable with a special name
+				//I want to know a better way, bc Paul will always tell me to avoid global variables at all cost
+			var nameThis = 'clockan' + i;
+			informadata[i] = [];
+			// console.log(informadata);
+		}
+	}
+	forstorData();
+
+	//time killer testing
+	$('.clokan').on('click', function() {
+		//which clokan is this out of its brothers and sisters?
+		var order = $(this).index();
+		console.log(order);
+		//something was clicked, so we need to mark it's time.
+		var click = new Date();
+
+		//check whether or not it is waiting to start, is running, or is paused
+		if ($(this).hasClass('init')) {
+			$(this).removeClass('init').addClass('running');
+			$(this).text('recording');
+
+			// record the time that this event has happened to this specific clokan
+			informadata[order].push(click.getTime());
+			// console.log(informadata[order]);
+
+		} else if ($(this).hasClass('running')) {
+			$(this).removeClass('running').addClass('paused');
+			informadata[order].push(click.getTime());
+
+			//we need to know how many start/stop pairs of data there are.
+			var clickAmount = informadata[order].length;
+			var addTheseTogether = [];
+			for (var j = (clickAmount / 2); j > 0; j--) {
+				//take start stop pair, as j and the previous entry to j
+				//subtract start from stop to find elapsed time
+				//put this elapsed time to the array we're saving them to
+				//remember that .length returns a number starting from 1, and our arrays start at 0
+				addTheseTogether.push(informadata[order][(j * 2 - 1)] - informadata[order][(j * 2 - 2)]);
+			}
+			var timeLogged = 0;
+			for (var k = 0; k < addTheseTogether.length; k++) {
+				timeLogged = timeLogged + addTheseTogether[k];
+			}
+
+			console.log(timeLogged);
+			var prettyTime = timeLogged / 1000;
+			$(this).text('paused at  ' + prettyTime + ' seconds');
+
+		} else if ($(this).hasClass('paused')) {
+			$(this).removeClass('paused').addClass('running');
+			informadata[order].push(click.getTime());
+			$(this).text('recording');
+
+		}
+	});
+
 });
 
 

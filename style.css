@@ -81,6 +81,7 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	list-style: none;
 	background: aquamarine;
 	padding: 0.5em 0.25em 0.5em;
+	/*margin: 0 0 1em;*/
 	transition: all 0.3s ease-in;
 }
 .controls {
@@ -113,7 +114,6 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	border-radius: 0.25em;
 	padding: 0.5em 0;
 	cursor: pointer;
-	max-width: 20em;
 }
 
 
@@ -197,6 +197,37 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 }
 
 
+
+
+
+
+
+
+
+/* time killer test */
+
+.clokan {
+	padding: 0.25em 0.5em;
+	color: inherit;
+	transition: all 0.3s ease-in;
+		-o-transition: all 0.3s ease-in;
+		-ms-transition: all 0.3s ease-in;
+		-moz-transition: all 0.3s ease-in;
+		-webkit-transition: all 0.3s ease-in;
+}
+
+.init {
+	background: #cacaca;
+}
+
+.running {
+	background: #66CC66;
+}
+
+.paused {
+	background: #913041;
+	color: white;
+}
 
 
 
