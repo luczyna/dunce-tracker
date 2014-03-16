@@ -15,7 +15,7 @@
 
 		<div id="time-killer" class="time-killer-wrapper">
 			<p class="clokan init">start</p>
-			<p class="clokan init">start</p>
+			<!-- <p class="clokan init">start</p> -->
 		</div>
 
 		<ul id="the-list">
@@ -26,6 +26,10 @@
 					<p contenteditable="true" class="title-settings-individual">type</p>
 					<p contenteditable="true" class="notes empty-field">enter in any notes on this task</p>
 					<p class="button">done</p>
+					<div class="status">
+						<span class="delete-me">delete</span>
+						<span class="finish-me">finished</span>
+					</div>
 				</div>
 			</li>
 
@@ -36,6 +40,10 @@
 					<p contenteditable="true" class="title-settings-individual">type</p>
 					<p contenteditable="true" class="notes empty-field">enter in any notes on this task</p>
 					<p class="button">done</p>
+					<div class="status">
+						<span class="delete-me">delete</span>
+						<span class="finish-me">finished</span>
+					</div>
 				</div>
 			</li>
 		</ul>
@@ -61,6 +69,10 @@
 		<p contenteditable="true" class="empty-field">Keep any notes on this list</p>
 		
 		<span class="closer">&times;</span>
+	</div>
+
+	<div class="archived-items">
+		<ul id="archive"></ul>
 	</div>
 
 	<!--	scripts 	-->

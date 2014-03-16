@@ -9,11 +9,11 @@ $(document).ready(function() {
 
 	// add more list items to list out your tasks
 	function addMoreItems() {
-		var item = '<li class="item empty-field not-completed"><span class="controls">&#8942;</span><p contenteditable="true" class="title-individual">type something you need to do</p><div class="item-info"><p contenteditable="true" class="title-settings-individual">type</p><p contenteditable="true" class="notes empty-field">enter in any notes on this task</p><p class="button">done</p></div></li>';
+		var item = '<li class="item empty-field not-completed" style="display: none;"><span class="controls">&#8942;</span><p contenteditable="true" class="title-individual">type something you need to do</p><div class="item-info"><p contenteditable="true" class="title-settings-individual">type</p><p contenteditable="true" class="notes empty-field">enter in any notes on this task</p><p class="button">done</p><div class="status"><span class="delete-me">delete</span><span class="finish-me">finished</span></div></div></li>';
 		var list = $('#the-list');
 		//tried .clone(), but it copied the first item word for word. 
 		//if the item was updated, the whole thing would be copied, and I couldn't save a 'plain' clone
-		$(item).appendTo(list);
+		$(item).appendTo(list).slideToggle(150, 'linear');
 	}
 	$('.more').click(function() {
 		addMoreItems();
@@ -98,6 +98,32 @@ $(document).ready(function() {
 			title.text(titleSettings.text());
 		}
 		settings.fadeOut(300);
+	});
+
+
+	//enable the status options
+	$('.status').find('span').click(function() {
+		var item = $(this).parents('.item');
+		var settings = item.find('.item-info');
+
+		if ($(this).hasClass('delete-me')) {
+			settings.fadeOut(250, function() {
+				item.slideUp(250, 'linear', function() {
+					item.addClass('deleted').appendTo('#archive');
+				});
+			});
+		} else if ($(this).hasClass('finish-me') && item.hasClass('not-completed')) {
+			settings.fadeOut(300, function() {
+				settings.find('.finish-me').text('not finished');
+				item.removeClass('not-completed').addClass('completed');
+			});
+		} else if ($(this).hasClass('finish-me') && item.hasClass('completed')) {
+			settings.fadeOut(300, function() {
+				settings.find('.finish-me').text('finished');
+				item.removeClass('completed').addClass('not-completed');
+			});
+		}
+
 	});
 
 
@@ -187,7 +213,7 @@ $(document).ready(function() {
 
 
 
-	
+
 
 	//before we do time-killer testing, we need to start the storage of data for each available clokan that can possibly be run.
 	var informadata = [];
@@ -210,7 +236,7 @@ $(document).ready(function() {
 	$('.clokan').on('click', function() {
 		//which clokan is this out of its brothers and sisters?
 		var order = $(this).index();
-		console.log(order);
+		// console.log(order);
 		//something was clicked, so we need to mark it's time.
 		var click = new Date();
 
@@ -242,9 +268,17 @@ $(document).ready(function() {
 				timeLogged = timeLogged + addTheseTogether[k];
 			}
 
-			console.log(timeLogged);
+			// console.log(timeLogged);
 			var prettyTime = timeLogged / 1000;
-			$(this).text('paused at  ' + prettyTime + ' seconds');
+			if (prettyTime > 60) {
+				var prettyMinutes = (prettyTime / 60).toFixed(2);
+				$(this).text('paused at  ' + prettyMinutes + ' minutes');
+			} else if (prettyTime > 3600) {
+				prettyHour = (prettyTime / 3600).toFixed(2);
+				$(this).text('paused at  ' + prettyHours + ' hours');
+			} else {
+				$(this).text('paused at  ' + ((prettyTime).toFixed(2)) + ' seconds');
+			}
 
 		} else if ($(this).hasClass('paused')) {
 			$(this).removeClass('paused').addClass('running');

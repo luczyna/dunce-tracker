@@ -65,6 +65,19 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	color: #f15d2f;
 }
 
+.flipper {
+	-o-transform: rotateX(90deg);
+	-ms-transform: rotateX(90deg);
+	-moz-transform: rotateX(90deg);
+	-webkit-transform: rotateX(90deg);
+	transform: rotateX(90deg);
+	-o-transform-origin: top;
+	-ms-transform-origin: top;
+	-moz-transform-origin: top;
+	-webkit-transform-origin: top;
+	transform-origin: top;
+}
+
 
 
 
@@ -81,8 +94,8 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	list-style: none;
 	background: aquamarine;
 	padding: 0.5em 0.25em 0.5em;
-	/*margin: 0 0 1em;*/
-	transition: all 0.3s ease-in;
+	transition: background 0.3s ease-in, color 0.3s ease-in;
+	/*transition: all 0.3s ease-in;*/
 }
 .controls {
 	float: right;
@@ -116,6 +129,13 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	cursor: pointer;
 }
 
+.completed {
+	background: #5d5d5d;
+	color: #9f9f9f;
+}
+
+.not-completed {}
+
 
 
 .more {
@@ -129,6 +149,26 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	padding: 0.5em 0;
 	vertical-align: bottom;
 }
+
+.item .status {
+	position: absolute;
+	bottom: 4em;
+	width: 95%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.status .delete-me,
+.status .finish-me {
+	display: inline-block;
+	width: 49.5%;
+	border-radius: 0.25em;
+	padding: 0.25em 0;
+}
+
+.status .delete-me { background: red; }
+
+.status .finish-me { background: green; }
 
 
 
@@ -225,7 +265,7 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 }
 
 .paused {
-	background: #913041;
+	background: #993335;
 	color: white;
 }
 
