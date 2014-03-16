@@ -199,10 +199,15 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 }
 
 .save-export {
-	border-top: 1px white solid;
 	border-bottom: 1px white solid;
 	margin: 1em 0;
 	padding: 0 0.25em 1em;
+}
+
+#save {
+	color: #f1f1f1;
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 .color {

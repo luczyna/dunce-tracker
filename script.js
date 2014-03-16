@@ -199,30 +199,35 @@ $(document).ready(function() {
 				//I want to know a better way, bc Paul will always tell me to avoid global variables at all cost
 			var nameThis = 'clockan' + i;
 			informadata[i] = [];
-			// console.log(informadata);
 		}
 	}
 	forstorData();
 
 	//time killer testing
 	$('.clokan').on('click', function() {
+		clokanUpdate($(this));
+	});
+
+
+	//we calculate the time, and print it out
+	function clokanUpdate(clokan) {
 		//which clokan is this out of its brothers and sisters?
-		var order = $(this).index();
+		var order = $(clokan).index();
 		// console.log(order);
 		//something was clicked, so we need to mark it's time.
 		var click = new Date();
 
 		//check whether or not it is waiting to start, is running, or is paused
-		if ($(this).hasClass('init')) {
-			$(this).removeClass('init').addClass('running');
-			$(this).text('recording');
+		if ($(clokan).hasClass('init')) {
+			$(clokan).removeClass('init').addClass('running');
+			$(clokan).text('recording');
 
 			// record the time that this event has happened to this specific clokan
 			informadata[order].push(click.getTime());
 			// console.log(informadata[order]);
 
-		} else if ($(this).hasClass('running')) {
-			$(this).removeClass('running').addClass('paused');
+		} else if ($(clokan).hasClass('running')) {
+			$(clokan).removeClass('running').addClass('paused');
 			informadata[order].push(click.getTime());
 
 			//we need to know how many start/stop pairs of data there are.
@@ -244,21 +249,68 @@ $(document).ready(function() {
 			var prettyTime = timeLogged / 1000;
 			if (prettyTime > 60) {
 				var prettyMinutes = (prettyTime / 60).toFixed(2);
-				$(this).text('paused at  ' + prettyMinutes + ' minutes');
+				$(clokan).text('paused at  ' + prettyMinutes + ' minutes');
 			} else if (prettyTime > 3600) {
 				prettyHour = (prettyTime / 3600).toFixed(2);
-				$(this).text('paused at  ' + prettyHours + ' hours');
+				$(clokan).text('paused at  ' + prettyHours + ' hours');
 			} else {
-				$(this).text('paused at  ' + ((prettyTime).toFixed(2)) + ' seconds');
+				$(clokan).text('paused at  ' + ((prettyTime).toFixed(2)) + ' seconds');
 			}
 
-		} else if ($(this).hasClass('paused')) {
-			$(this).removeClass('paused').addClass('running');
+		} else if ($(clokan).hasClass('paused')) {
+			$(clokan).removeClass('paused').addClass('running');
 			informadata[order].push(click.getTime());
-			$(this).text('recording');
+			$(clokan).text('recording');
 
 		}
+	}
+
+
+	//save our information into the localStorage!
+	$('#save').click(function() {
+		//pause the timer if it is running
+		if($('.clokan').hasClass('running')) {
+			clokanUpdate($(this));
+		}
+
+		//now go through the information
+		if(!$(this).hasClass('saved')) {
+			var string = prompt('What would like to save this list as?');
+			console.log(string);
+
+			//start the saving into localStorage
+				//the title and list information
+			localStorage.setItem(string + '_list-title', $('#list-title').text());
+			localStorage.setItem(string + '_list-desc', $('#list-desc').text());
+			if (!scheme) {
+				localStorage.setItem(string + '_color-scheme', scheme);
+			} else {
+				localStorage.setItem(string + '_color-scheme', 'default');
+			}
+
+				//the list items
+			localStorage.setItem(string + '_list-length', $('.item').length);
+			for (var i = 0; i < $('.item').length; i++) {
+				localStorage.setItem(string + '_item-title_' + i, $('.item').eq(i).find('.title-individual').text());
+				localStorage.setItem(string + '_item_notes_' + i, $('.item').eq(i).find('.notes').text());
+				localStorage.setItem(string + '_item_classes_' + i, $('.item').attr('class'));
+			}			
+
+				//the time information
+			localStorage.setItem(string + '_time', informadata.toString());
+
+			//mark the save as having done it's job
+			$('#job').addClass('saved');
+
+			//tell the person that they can access this list
+			alert('you can access this list later with index.html?s=' + string);
+		} else {
+			console.log('why, lord?');
+		}
 	});
+
+	
+	//this function will load all the saved localStorage information
 
 });
 
