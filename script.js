@@ -128,34 +128,6 @@ $(document).ready(function() {
 
 
 
-	//track your time!
-	var running = false;
-	var start, now, keepTrack;
-	function timeKiller() {
-		var control = $(this);
-		var clock = $('#time-monitor');
-		if (!running) {
-			//change the button to say stop
-			control.text('stop');
-			start = new Date();
-			keepTrack = start.getTime();
-			clock.text('0 minutes');
-			clock.show();
-			running = true;
-		} else if (running) {
-			now = new Date();
-			control.text('elapsed time');
-			console.log(keepTrack);
-			console.log(now.getTime());
-			var elapsed = Math.round(((now.getTime() - start.getTime()) / 1000) / 60)
-			clock.text(  + ' minutes') ;
-			running = false;
-		}
-	}
-	$('#time-control').click(timeKiller);
-
-
-
 	//choose a color scheme!
 	var scheme;
 	function colorScheme() {
