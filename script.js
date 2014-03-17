@@ -1,19 +1,59 @@
 $(document).ready(function() {
-
+	var informadata = [];
 	function init() {
 		$('#settings').hide();
+		
+		//is there a query for saved information?
+		if ((window.location.search).indexOf('?') !== -1) {
+			var query = window.location.search;
+			//should return ?saved=someString
+			query = query.replace('?saved=', '');
+			if (checkLocalStorage(query)) {
+				loadLocalStorage(query);
+			}
+		}
 	}
 	init();
 
 
 
 	// add more list items to list out your tasks
-	function addMoreItems() {
-		var item = '<li class="item empty-field not-completed" style="display: none;"><span class="controls">&#8942;</span><p contenteditable="true" class="title-individual">type something you need to do</p><div class="item-info"><p contenteditable="true" class="title-settings-individual">type</p><p contenteditable="true" class="notes empty-field">enter in any notes on this task</p><p class="button">done</p><div class="status"><span class="delete-me">delete</span><span class="finish-me">finished</span></div></div></li>';
-		var list = $('#the-list');
+	// param classes = string [class list]
+	// param display = bool   [show this initially? useful for animations]
+	// param title   = string [title]
+	// param desc    = string [description of item]
+	// param list    = object [where to append the item]
+	function addMoreItems(classes, display, title, desc, list) {
+
+		//default values
+		classes = typeof classes !== 'undefined' ? classes : 'item empty-field not-completed';
+		display = typeof display !== 'undefined' ? display : false;
+		title   = typeof title   !== 'undefined' ? title   : 'type something you need to do';
+		desc    = typeof desc    !== 'undefined' ? desc    : 'enter in any notes on this task';
+		list    = typeof list    !== 'undefined' ? list    : '#the-list';
+
+		//build our item
+		var item = '<li class="' + classes + '"';
+		if (!display) {
+			item += 'style="display: none;" >';
+		} else {
+			item += '>';
+		}
+		item += '<span class="controls">&#8942;</span>';
+		item += '<p contenteditable="true" class="title-individual">' + title + '</p>';
+		item += '<div class="item-info"><p contenteditable="true" class="title-settings-individual">' + title + '</p>';
+		item += '<p contenteditable="true" class="notes empty-field">' + desc + '</p>';
+		item += '<p class="button">done</p><div class="status"><span class="delete-me">delete</span><span class="finish-me">finished</span></div></div></li>';
+		var destination = $(list);
 		//tried .clone(), but it copied the first item word for word. 
 		//if the item was updated, the whole thing would be copied, and I couldn't save a 'plain' clone
-		$(item).appendTo(list).slideToggle(150, 'linear');
+
+		//if this will be visible in the end?
+		if (display === false) {
+			$(item).appendTo(destination).slideDown(150, 'linear');
+		} else {
+			destination.append($(item));
+		}
 	}
 	$('.more').click(function() {
 		addMoreItems();
@@ -188,7 +228,7 @@ $(document).ready(function() {
 
 
 	//before we do time-killer testing, we need to start the storage of data for each available clokan that can possibly be run.
-	var informadata = [];
+	// informadata = [];
 	function forstorData() {
 		//how many clockans are we dealing with?
 		var amount = $('.clokan').length;
@@ -256,6 +296,7 @@ $(document).ready(function() {
 			} else {
 				$(clokan).text('paused at  ' + ((prettyTime).toFixed(2)) + ' seconds');
 			}
+			console.log(informadata);
 
 		} else if ($(clokan).hasClass('paused')) {
 			$(clokan).removeClass('paused').addClass('running');
@@ -276,7 +317,10 @@ $(document).ready(function() {
 		//now go through the information
 		if(!$(this).hasClass('saved')) {
 			var string = prompt('What would like to save this list as?');
-			console.log(string);
+			// console.log(string);
+
+			//set up a check value
+			localStorage.setItem(string + '_list', 'true');
 
 			//start the saving into localStorage
 				//the title and list information
@@ -292,8 +336,8 @@ $(document).ready(function() {
 			localStorage.setItem(string + '_list-length', $('.item').length);
 			for (var i = 0; i < $('.item').length; i++) {
 				localStorage.setItem(string + '_item-title_' + i, $('.item').eq(i).find('.title-individual').text());
-				localStorage.setItem(string + '_item_notes_' + i, $('.item').eq(i).find('.notes').text());
-				localStorage.setItem(string + '_item_classes_' + i, $('.item').attr('class'));
+				localStorage.setItem(string + '_item-notes_' + i, $('.item').eq(i).find('.notes').text());
+				localStorage.setItem(string + '_item-classes_' + i, $('.item').attr('class'));
 			}			
 
 				//the time information
@@ -311,7 +355,78 @@ $(document).ready(function() {
 
 	
 	//this function will load all the saved localStorage information
+	function loadLocalStorage(string) {
+		//clear any existing items first
+		$('.item').slideUp(100, function() {
+			$(this).remove();
+		});
+		
 
+
+		//what is the title of this list?
+		$('#list-title').text(localStorage.getItem(string + '_list-title'));
+		//what is the description?
+		$('#list-desc').text(localStorage.getItem(string + '_list-desc'));
+
+		//what is the color scheme?
+		scheme = localStorage.getItem(string + '_color-scheme')
+		colorChange();
+
+		//now all the list items
+		itemLength = parseInt(localStorage.getItem(string + '_list-length'), 10);
+
+		for (var i = 0; i < itemLength; i++) {
+			var title = localStorage.getItem(string + '_item-title_' + i);
+			var desc = localStorage.getItem(string + '_item-notes_' + i);
+			var classes = localStorage.getItem(string + '_item-classes_' + i);
+			var list;
+			var display;
+
+			//which list does this go to?
+			//is this an archived item?
+			if (classes.indexOf("deleted") != -1) {
+				//this is archived
+				list = '#archive';
+				display = false;
+			} else {
+				//this goes in the main list
+				list = '#the-list';
+				display: true;
+			}
+			addMoreItems(classes, display, title, desc, list)
+		}
+		//end the for loop
+
+		//get the time information
+		//the time information
+		var savedTimeString = localStorage.getItem(string + '_time');
+		//we are only using 1 clokan so far. if this ever changes, then this needs to change
+		var arrayOfTime = savedTimeString.split(',');
+		for (var j = 0; j < arrayOfTime.length; j++) {
+			informadata[j] = arrayOfTime[j];
+		}
+		console.log(savedTimeString.split(','));
+		console.log(informadata)
+	}
+
+
+
+	//this function will check to make sure there is something to grab
+	function checkLocalStorage(string) {
+		if (localStorage.getItem(string + '_list') === 'true') {
+			return true;
+		} else {
+			var alternatives = [];
+			var keys = Object.keys(localStorage);
+			for (var i = 0; i < keys.length; i++) {
+				if (localStorage.getItem(key) = true) {
+					alternatives.push(localStorage.getItem(key));
+				}
+			}
+			alert('did you mean something else? maybe ' + alternatives.toString());
+			return false;
+		}
+	}
 });
 
 
