@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	var informadata = [];
+	forstorData();
+	
 	function init() {
 		$('#settings').hide();
 		
@@ -241,7 +243,7 @@ $(document).ready(function() {
 			informadata[i] = [];
 		}
 	}
-	forstorData();
+	
 
 	//time killer testing
 	$('.clokan').on('click', function() {
@@ -403,10 +405,10 @@ $(document).ready(function() {
 		//we are only using 1 clokan so far. if this ever changes, then this needs to change
 		var arrayOfTime = savedTimeString.split(',');
 		for (var j = 0; j < arrayOfTime.length; j++) {
-			informadata[j] = arrayOfTime[j];
+			var numeral = parseInt(arrayOfTime[j], 10);
+			informadata[0].push(numeral);
 		}
-		console.log(savedTimeString.split(','));
-		console.log(informadata)
+		// console.log(informadata[0]);
 	}
 
 
