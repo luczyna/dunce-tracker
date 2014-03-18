@@ -97,6 +97,7 @@ $(document).ready(function() {
 
 		settings.fadeIn();
 	});
+
 	//close the settings dialogue and make the appropriate changes
 	$('.closer').click(function() {
 		var settings = $('#settings');
@@ -339,7 +340,7 @@ $(document).ready(function() {
 			for (var i = 0; i < $('.item').length; i++) {
 				localStorage.setItem(string + '_item-title_' + i, $('.item').eq(i).find('.title-individual').text());
 				localStorage.setItem(string + '_item-notes_' + i, $('.item').eq(i).find('.notes').text());
-				localStorage.setItem(string + '_item-classes_' + i, $('.item').attr('class'));
+				localStorage.setItem(string + '_item-classes_' + i, $('.item').eq(i).attr('class'));
 			}			
 
 				//the time information
@@ -429,6 +430,54 @@ $(document).ready(function() {
 			return false;
 		}
 	}
+
+
+
+
+	//create a txt that someone can copy and save to something else
+	function exportList() {
+		var string;
+
+		//save stuff to string
+		//the title
+		string = '<p>' + $('#list-title').text() + '</p>';
+		string += '<p>' +$('#list-desc').text() + '</p>';
+
+		//the list items
+		for (var i = 0; i < $('.item').length; i++) {
+			string += '<p>' + (i + 1) + '. ' + $('.item').eq(i).find('.title-individual').text() + '<br>';
+			string += $('.item').eq(i).find('.notes').text() + '<br>';
+			string += ' [ ';
+			var classes = $('.item').eq(i).attr('class');
+			if (classes.indexOf("deleted") != -1) {
+				string += 'archived ';
+			}
+			if (classes.indexOf("completed") != -1) {
+				string += 'completed ';
+			}
+			if (classes.indexOf("not-completed") != -1) {
+				string += 'not completed ';
+			}
+			string += ']';
+			string += '</p>';
+		}
+
+		//now show the entire list in a popup for someone to copy and paste
+		$('#export-data').html(string);
+		$('.export').fadeIn(300);
+	}
+
+	$('#export-me').click(function() {
+		var settings = $('#settings');
+
+		settings.fadeOut(250, function() {
+			exportList();
+		});
+	});
+
+	$('.close-export').click(function() {
+		$('.export').fadeOut(300);
+	});
 });
 
 
