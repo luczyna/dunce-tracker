@@ -192,7 +192,8 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 }
 
 #save,
-#export-me {
+#export-me,
+.load-me {
 	color: #f1f1f1;
 	text-decoration: underline;
 	cursor: pointer;

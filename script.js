@@ -420,16 +420,30 @@ $(document).ready(function() {
 			return true;
 		} else {
 			var alternatives = [];
-			var keys = Object.keys(localStorage);
-			for (var i = 0; i < keys.length; i++) {
-				if (localStorage.getItem(key) = true) {
-					alternatives.push(localStorage.getItem(key));
+			for (var i = 0; i < localStorage.length; i++) {
+				var key = localStorage.key(i);
+
+				//we check for any key that returns true... since that was our check initially.
+				if (localStorage.getItem(key) === 'true') {
+					var string = key.replace('_list', '');
+					alternatives.push(string);
+					delete string;
 				}
+				// key = NULL;
+				delete key;
 			}
-			alert('did you mean something else? maybe ' + alternatives.toString());
+			alert('did you mean something else? maybe the following: \n' + alternatives.toString());
 			return false;
 		}
 	}
+
+	$('.load-me').click(function() {
+		var query = prompt('what did you save your list as?');
+		if (checkLocalStorage(query)) {
+				loadLocalStorage(query);
+			}
+
+	})
 
 
 
