@@ -130,8 +130,8 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 }
 
 .completed {
-	background: #5d5d5d;
-	color: #9f9f9f;
+	background: #5d5d5d !important;
+	color: #9f9f9f !important;
 }
 
 .not-completed {}
