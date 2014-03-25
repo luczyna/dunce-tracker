@@ -26,7 +26,7 @@ $(document).ready(function() {
 	// param title   = string [title]
 	// param desc    = string [description of item]
 	// param list    = object [where to append the item]
-	function addMoreItems(classes, display, title, desc, list) {
+	function addMoreItems(classes, display, title, desc, list, clokan) {
 
 		//default values
 		classes = typeof classes !== 'undefined' ? classes : 'item empty-field not-completed';
@@ -34,9 +34,15 @@ $(document).ready(function() {
 		title   = typeof title   !== 'undefined' ? title   : 'type something you need to do';
 		desc    = typeof desc    !== 'undefined' ? desc    : 'enter in any notes on this task';
 		list    = typeof list    !== 'undefined' ? list    : '#the-list';
+		clokan  = typeof clokan  !== 'undefined' ? clokan  : false;
 
 		//clokan value
-		var clokanIndex = forstorData();
+		var clokanIndex;
+		if (clokan) {
+			clokanIndex = clokan;
+		} else {
+			clokanIndex = forstorData();
+		}
 
 		//build our item
 		var item = '<li class="' + classes + '"';
@@ -165,6 +171,52 @@ $(document).ready(function() {
 
 	});
 
+	$('.title-individual').live('click', function() {
+		if ($(this).text() === 'type something you need to do') {
+			// console.log('you are trying to change me, baby');
+			$(this).selectText();
+		}
+	});
+
+	$('.notes').live('click', function() {
+		if ($(this).text() === 'enter in any notes on this task') {
+			$(this).selectText();
+		}
+	});
+
+	$('#list-title').live('click', function() {
+		if ($(this).text() === 'Title of List') {
+			$(this).selectText();
+		}
+	});
+
+	$('#list-desc').live('click', function() {
+		if ($(this).text() === 'Keep any notes on this list') {
+			$(this).selectText();
+		}
+	});
+
+	//http://stackoverflow.com/questions/12243898/how-to-select-all-text-in-contenteditable-div#answer-12244703
+	jQuery.fn.selectText = function(){
+		var doc = document;
+		var element = this[0];
+
+		// console.log(this, element);
+		
+		if (doc.body.createTextRange) {
+			var range = document.body.createTextRange();
+			range.moveToElementText(element);
+			range.select();
+			// console.log('first');
+		} else if (window.getSelection) {
+			var selection = window.getSelection();        
+			var range = document.createRange();
+			range.selectNodeContents(element);
+			selection.removeAllRanges();
+			selection.addRange(range);
+			// console.log('second');
+		}
+	};
 
 
 	//choose a color scheme!
@@ -236,11 +288,11 @@ $(document).ready(function() {
 			//store this in a global variable with a special name
 				//I want to know a better way, bc Paul will always tell me to avoid global variables at all cost
 			$('.clokan').eq(i).attr('data-count', i);
-			console.log(i);
+			// console.log(i);
 			informadata[i] = [];
 		}
 		informadata['count'] = amount;
-		console.log(informadata);
+		// console.log(informadata);
 	}
 
 	function forstorData() {
@@ -303,7 +355,7 @@ $(document).ready(function() {
 
 			// console.log(timeLogged);
 			var prettyTime = timeLogged / 1000;
-			console.log(prettyTime);
+			// console.log(prettyTime);
 			if (prettyTime > 3600) {
 				prettyHour = (prettyTime / 3600).toFixed(2);
 				$(clokan).text('paused at  ' + prettyHours + ' hours');
@@ -313,7 +365,7 @@ $(document).ready(function() {
 			} else {
 				$(clokan).text('paused at  ' + ((prettyTime).toFixed(2)) + ' seconds');
 			}
-			console.log(informadata);
+			// console.log(informadata);
 
 		} else if ($(clokan).hasClass('paused')) {
 			$(clokan).removeClass('paused').addClass('running');
@@ -331,43 +383,39 @@ $(document).ready(function() {
 			clokanUpdate($(this));
 		}
 
-		//now go through the information
-		if(!$(this).hasClass('saved')) {
-			var string = prompt('What would like to save this list as?');
-			// console.log(string);
+		var string = prompt('What would like to save this list as? Please enter a single word, no spaces or funny business.');
+		// console.log(string);
 
-			//set up a check value
-			localStorage.setItem(string + '_list', 'true');
+		//set up a check value
+		localStorage.setItem(string + '_list', 'true');
 
-			//start the saving into localStorage
-				//the title and list information
-			localStorage.setItem(string + '_list-title', $('#list-title').text());
-			localStorage.setItem(string + '_list-desc', $('#list-desc').text());
-			if (!scheme) {
-				localStorage.setItem(string + '_color-scheme', scheme);
-			} else {
-				localStorage.setItem(string + '_color-scheme', 'default');
-			}
-
-				//the list items
-			localStorage.setItem(string + '_list-length', $('.item').length);
-			for (var i = 0; i < $('.item').length; i++) {
-				localStorage.setItem(string + '_item-title_' + i, $('.item').eq(i).find('.title-individual').text());
-				localStorage.setItem(string + '_item-notes_' + i, $('.item').eq(i).find('.notes').text());
-				localStorage.setItem(string + '_item-classes_' + i, $('.item').eq(i).attr('class'));
-			}			
-
-				//the time information
-			localStorage.setItem(string + '_time', informadata.toString());
-
-			//mark the save as having done it's job
-			$('#job').addClass('saved');
-
-			//tell the person that they can access this list
-			alert('you can access this list later with index.html?s=' + string);
+		//start the saving into localStorage
+			//the title and list information
+		localStorage.setItem(string + '_list-title', $('#list-title').text());
+		localStorage.setItem(string + '_list-desc', $('#list-desc').text());
+		if (!scheme) {
+			localStorage.setItem(string + '_color-scheme', scheme);
 		} else {
-			console.log('why, lord?');
+			localStorage.setItem(string + '_color-scheme', 'default');
 		}
+
+			//the list items
+		localStorage.setItem(string + '_list-length', $('.item').length);
+		for (var i = 0; i < $('.item').length; i++) {
+			localStorage.setItem(string + '_item-title_' + i, $('.item').eq(i).find('.title-individual').text());
+			localStorage.setItem(string + '_item-notes_' + i, $('.item').eq(i).find('.notes').text());
+			localStorage.setItem(string + '_item-classes_' + i, $('.item').eq(i).attr('class'));
+			localStorage.setItem(string + '_item-clokan_' + i, $('.item').eq(i).find('.clokan').attr('data-count'));
+		}	
+
+			//the time information
+		localStorage.setItem(string + '_time', informadata.toString());
+
+		//mark the save as having done it's job
+		$('#save').addClass('saved');
+
+		//tell the person that they can access this list
+		alert('you can access this list later with lorax/index.html?s=' + string);
 	});
 
 	
@@ -393,9 +441,10 @@ $(document).ready(function() {
 		itemLength = parseInt(localStorage.getItem(string + '_list-length'), 10);
 
 		for (var i = 0; i < itemLength; i++) {
-			var title = localStorage.getItem(string + '_item-title_' + i);
-			var desc = localStorage.getItem(string + '_item-notes_' + i);
-			var classes = localStorage.getItem(string + '_item-classes_' + i);
+			var title     = localStorage.getItem(string + '_item-title_' + i);
+			var desc      = localStorage.getItem(string + '_item-notes_' + i);
+			var classes   = localStorage.getItem(string + '_item-classes_' + i);
+			var timeIndex = parseInt(localStorage.getItem(string + '_item-clokan_' + i), 10);
 			var list;
 			var display;
 
@@ -408,15 +457,16 @@ $(document).ready(function() {
 			} else {
 				//this goes in the main list
 				list = '#the-list';
-				display: true;
+				display = true;
 			}
-			addMoreItems(classes, display, title, desc, list)
+			addMoreItems(classes, display, title, desc, list, timeIndex);
 		}
 		//end the for loop
 
 		//get the time information
 		//the time information
 		var savedTimeString = localStorage.getItem(string + '_time');
+		console.log(savedTimeString);
 		//we are only using 1 clokan so far. if this ever changes, then this needs to change
 		var arrayOfTime = savedTimeString.split(',');
 		for (var j = 0; j < arrayOfTime.length; j++) {
@@ -457,7 +507,7 @@ $(document).ready(function() {
 				loadLocalStorage(query);
 			}
 
-	})
+	});
 
 
 
