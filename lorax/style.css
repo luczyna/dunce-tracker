@@ -1,4 +1,4 @@
-/*		I ' L L    N E V E R    B E    T I M E S H E E T    D U N C E    W I T H     T H I S		*/
+/*		T H I S    I S    F O R    Y O U    L O R A X		*/
 
 html, body {
 	margin: 0;
@@ -86,8 +86,8 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 }
 .controls {
 	float: right;
-	font-size: 1.5em;
-	padding: 0.45em 2% 0 0;
+	font-size: 1em;
+	padding: 1em 2% 0 0;
 	cursor: pointer;
 }
 .item p {
@@ -95,20 +95,13 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 }
 .item .item-info {
 	display: none;
-	position: absolute;
-	top: 1em;
-	left: -1em;
-	right: -1em;
-	min-height: 17em;
-	padding: 1em 1em 6em;
-	background: black;
-	background: rgba(0, 0, 0, 0.8);
-	color: white;
+	width: 100%;
+	margin: 0 -1%;
+	padding: 1em 1%;
+	background: rgba(0, 0, 0, 0.1);
 }
 
 .button {
-	position: absolute;
-	bottom: 0;
 	text-align: center;
 	background: #f15d2f;
 	border-radius: 0.25em;
@@ -123,6 +116,24 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 
 .not-completed {}
 
+.item .status {
+	width: 95%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.status .delete-me,
+.status .finish-me {
+	display: inline-block;
+	width: 45%;
+	border-radius: 0.25em;
+	padding: 0.25em 0;
+}
+
+.status .delete-me { background: red; color: black; }
+
+.status .finish-me { background: green; color: white; }
+
 
 
 .more {
@@ -136,26 +147,6 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	padding: 0.5em 0;
 	vertical-align: bottom;
 }
-
-.item .status {
-	position: absolute;
-	bottom: 4em;
-	width: 95%;
-	margin: 0 auto;
-	text-align: center;
-}
-
-.status .delete-me,
-.status .finish-me {
-	display: inline-block;
-	width: 49.5%;
-	border-radius: 0.25em;
-	padding: 0.25em 0;
-}
-
-.status .delete-me { background: red; }
-
-.status .finish-me { background: green; }
 
 
 
@@ -243,6 +234,7 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 .clokan {
 	padding: 0.25em 0.5em;
 	color: inherit;
+	margin: 0;
 	transition: all 0.3s ease-in;
 		-o-transition: all 0.3s ease-in;
 		-ms-transition: all 0.3s ease-in;

@@ -41,11 +41,12 @@ $(document).ready(function() {
 		} else {
 			item += '>';
 		}
-		item += '<span class="controls">&#8942;</span>';
+		item += '<span class="controls">&#9660;</span>';
 		item += '<p contenteditable="true" class="title-individual">' + title + '</p>';
-		item += '<div class="item-info"><p contenteditable="true" class="title-settings-individual">' + title + '</p>';
+		item += '<div class="item-info">';
+		item += '<p class="clokan init">start a timer</p>';
 		item += '<p contenteditable="true" class="notes empty-field">' + desc + '</p>';
-		item += '<p class="button">done</p><div class="status"><span class="delete-me">delete</span><span class="finish-me">finished</span></div></div></li>';
+		item += '<div class="status"><span class="delete-me">delete</span><span class="finish-me">finished</span></div></div></li>';
 		var destination = $(list);
 
 		//tried .clone(), but it copied the first item word for word. 
@@ -116,32 +117,12 @@ $(document).ready(function() {
 
 
 
-	//open individual settings when the ... is clicked
+	//open individual settings when the down arrow is clicked
 	$('.controls').live('click', function() {
-		console.log('you clicked it');
+		// console.log('you clicked it');
 		var item = $(this).parent('.item');
 		var settings = item.find('.item-info');
-		var title = item.find('.title-individual');
-		var titleSettings = settings.find('.title-settings-individual');
-		
-		//control the title... when it is changed it needs to be reflected in other areas
-		if (title.text() != titleSettings.text()) {
-			titleSettings.text(title.text());
-		}
-		settings.fadeIn(350);
-	});
-	//close the individual settings
-	$('.button').live('click', function() {
-		var settings = $(this).parent('.item-info');
-		var item = settings.parent('.item');
-		var title = item.find('.title-individual');
-		var titleSettings = settings.find('.title-settings-individual');
-		
-		//control the title... when it is changed it needs to be reflected in other areas
-		if (title.text() !== titleSettings.text()) {
-			title.text(titleSettings.text());
-		}
-		settings.fadeOut(300);
+		settings.slideToggle(350);
 	});
 
 
@@ -151,20 +132,24 @@ $(document).ready(function() {
 		var settings = item.find('.item-info');
 
 		if ($(this).hasClass('delete-me')) {
-			settings.fadeOut(250, function() {
-				item.slideUp(250, 'linear', function() {
+			settings.slideUp(400, function() {
+				item.delay(200).slideUp(100, 'linear', function() {
 					item.addClass('deleted').appendTo('#archive');
 				});
 			});
 		} else if ($(this).hasClass('finish-me') && item.hasClass('not-completed')) {
-			settings.fadeOut(300, function() {
+			settings.slideUp(300, function() {
 				settings.find('.finish-me').text('not finished');
+			}).queue(function() {
 				item.removeClass('not-completed').addClass('completed');
+				$(this).dequeue();
 			});
 		} else if ($(this).hasClass('finish-me') && item.hasClass('completed')) {
-			settings.fadeOut(300, function() {
+			settings.slideUp(300, function() {
 				settings.find('.finish-me').text('finished');
+			}).queue(function() {
 				item.removeClass('completed').addClass('not-completed');
+				$(this).dequeue();
 			});
 		}
 
