@@ -47,6 +47,7 @@ $(document).ready(function() {
 		item += '<p contenteditable="true" class="notes empty-field">' + desc + '</p>';
 		item += '<p class="button">done</p><div class="status"><span class="delete-me">delete</span><span class="finish-me">finished</span></div></div></li>';
 		var destination = $(list);
+
 		//tried .clone(), but it copied the first item word for word. 
 		//if the item was updated, the whole thing would be copied, and I couldn't save a 'plain' clone
 
@@ -145,7 +146,7 @@ $(document).ready(function() {
 
 
 	//enable the status options
-	$('.status').find('span').click(function() {
+	$('.status').find('span').live('click', function() {
 		var item = $(this).parents('.item');
 		var settings = item.find('.item-info');
 
