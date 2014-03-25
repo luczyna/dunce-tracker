@@ -122,7 +122,13 @@ $(document).ready(function() {
 		// console.log('you clicked it');
 		var item = $(this).parent('.item');
 		var settings = item.find('.item-info');
-		settings.slideToggle(350);
+		if (item.hasClass('active')) {
+			settings.slideUp(350);
+			item.removeClass('active');
+		} else {
+			settings.slideToggle(350);
+			item.addClass('active');
+		}
 	});
 
 

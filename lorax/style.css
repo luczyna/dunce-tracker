@@ -81,7 +81,7 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	list-style: none;
 	background: aquamarine;
 	padding: 0.5em 0.25em 0.5em;
-	transition: background 0.3s ease-in, color 0.3s ease-in;
+	transition: background 0.3s ease-in, color 0.3s ease-in, margin 0.2s ease-out;
 	/*transition: all 0.3s ease-in;*/
 }
 .controls {
@@ -112,6 +112,10 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 .completed {
 	background: #5d5d5d !important;
 	color: #9f9f9f !important;
+}
+
+.active {
+	margin: 1em 0;
 }
 
 .not-completed {}
