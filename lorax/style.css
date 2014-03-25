@@ -82,7 +82,6 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	background: aquamarine;
 	padding: 0.5em 0.25em 0.5em;
 	transition: background 0.3s ease-in, color 0.3s ease-in, margin 0.2s ease-out;
-	/*transition: all 0.3s ease-in;*/
 }
 .controls {
 	float: right;
@@ -237,8 +236,8 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 
 .clokan {
 	padding: 0.25em 0.5em;
+	margin: 0 auto;
 	color: inherit;
-	margin: 0;
 	transition: all 0.3s ease-in;
 		-o-transition: all 0.3s ease-in;
 		-ms-transition: all 0.3s ease-in;

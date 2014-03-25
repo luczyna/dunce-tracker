@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	var informadata = [];
-	forstorData();
+	initForstorData();
+	// forstorData();
 	
 	function init() {
 		$('#settings').hide();
@@ -34,6 +35,9 @@ $(document).ready(function() {
 		desc    = typeof desc    !== 'undefined' ? desc    : 'enter in any notes on this task';
 		list    = typeof list    !== 'undefined' ? list    : '#the-list';
 
+		//clokan value
+		var clokanIndex = forstorData();
+
 		//build our item
 		var item = '<li class="' + classes + '"';
 		if (!display) {
@@ -44,7 +48,7 @@ $(document).ready(function() {
 		item += '<span class="controls">&#9660;</span>';
 		item += '<p contenteditable="true" class="title-individual">' + title + '</p>';
 		item += '<div class="item-info">';
-		item += '<p class="clokan init">start a timer</p>';
+		item += '<p class="clokan init" data-count="' + clokanIndex + '">start a timer</p>';
 		item += '<p contenteditable="true" class="notes empty-field">' + desc + '</p>';
 		item += '<div class="status"><span class="delete-me">delete</span><span class="finish-me">finished</span></div></div></li>';
 		var destination = $(list);
@@ -223,23 +227,40 @@ $(document).ready(function() {
 
 
 	//before we do time-killer testing, we need to start the storage of data for each available clokan that can possibly be run.
-	// informadata = [];
-	function forstorData() {
-		//how many clockans are we dealing with?
+	function initForstorData() {
+		//how many clokans are we dealing with initally?
 		var amount = $('.clokan').length;
 		
 		//create an array for each clokan that will store the data on time
 		for (var i = 0; i < amount; i++) {
 			//store this in a global variable with a special name
 				//I want to know a better way, bc Paul will always tell me to avoid global variables at all cost
-			var nameThis = 'clockan' + i;
+			$('.clokan').eq(i).attr('data-count', i);
+			console.log(i);
 			informadata[i] = [];
 		}
+		informadata['count'] = amount;
+		console.log(informadata);
+	}
+
+	function forstorData() {
+		//we run this every time a new clock is added
+		//the current clock count will go up by one everytime
+		//remember that the count is based at 1, not 0
+		var newCount = informadata['count'];
+		informadata['count'] = newCount + 1;
+
+		//this initiallizes the empty array for this particular clokan
+		informadata[newCount] = [];
+
+		console.log(informadata);
+		//this give the count to be attributed to the new clokan
+		return newCount;
 	}
 	
 
 	//time killer testing
-	$('.clokan').on('click', function() {
+	$('.clokan').live('click', function() {
 		clokanUpdate($(this));
 	});
 
@@ -247,7 +268,7 @@ $(document).ready(function() {
 	//we calculate the time, and print it out
 	function clokanUpdate(clokan) {
 		//which clokan is this out of its brothers and sisters?
-		var order = $(clokan).index();
+		var order = parseInt($(clokan).attr('data-count'), 10);
 		// console.log(order);
 		//something was clicked, so we need to mark it's time.
 		var click = new Date();
