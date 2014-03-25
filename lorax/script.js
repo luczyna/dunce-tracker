@@ -403,7 +403,7 @@ $(document).ready(function() {
 		localStorage.setItem(string + '_list-length', $('.item').length);
 		for (var i = 0; i < $('.item').length; i++) {
 			localStorage.setItem(string + '_item-title_' + i, $('.item').eq(i).find('.title-individual').text());
-			localStorage.setItem(string + '_item-notes_' + i, $('.item').eq(i).find('.notes').text());
+			localStorage.setItem(string + '_item-notes_' + i, $('.item').eq(i).find('.notes').html());
 			localStorage.setItem(string + '_item-classes_' + i, $('.item').eq(i).attr('class'));
 			localStorage.setItem(string + '_item-clokan_' + i, $('.item').eq(i).find('.clokan').attr('data-count'));
 		}	
