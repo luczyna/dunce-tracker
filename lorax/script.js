@@ -150,21 +150,21 @@ $(document).ready(function() {
 		if ($(this).hasClass('delete-me')) {
 			settings.slideUp(400, function() {
 				item.delay(200).slideUp(100, 'linear', function() {
-					item.addClass('deleted').appendTo('#archive');
+					item.addClass('deleted').removeClass('active').appendTo('#archive');
 				});
 			});
 		} else if ($(this).hasClass('finish-me') && item.hasClass('not-completed')) {
 			settings.slideUp(300, function() {
 				settings.find('.finish-me').text('not finished');
 			}).queue(function() {
-				item.removeClass('not-completed').addClass('completed');
+				item.removeClass('not-completed active').addClass('completed');
 				$(this).dequeue();
 			});
 		} else if ($(this).hasClass('finish-me') && item.hasClass('completed')) {
 			settings.slideUp(300, function() {
 				settings.find('.finish-me').text('finished');
 			}).queue(function() {
-				item.removeClass('completed').addClass('not-completed');
+				item.removeClass('completed active').addClass('not-completed');
 				$(this).dequeue();
 			});
 		}
@@ -524,13 +524,20 @@ $(document).ready(function() {
 		//the list items
 		for (var i = 0; i < $('.item').length; i++) {
 			string += '<p>' + (i + 1) + '. ' + $('.item').eq(i).find('.title-individual').text() + '<br>';
-			string += $('.item').eq(i).find('.notes').text() + '<br>';
-			string += ' [ ';
+			var itemNotes = $('.item').eq(i).find('.notes').html();
+			var find1 = new RegExp('</div><div>', 'g');
+			var find2 = new RegExp('</div>', 'g');
+			var find3 = new RegExp('<div>', 'g');
+			itemNotes = itemNotes.replace(find1, '');
+			itemNotes = itemNotes.replace(find2, '');
+			itemNotes = itemNotes.replace(find3, '<br>');
+			string += '<p>' + itemNotes + '</p>';
+			string += ' <p>[ ';
 			var classes = $('.item').eq(i).attr('class');
 			if (classes.indexOf("deleted") != -1) {
 				string += 'archived ';
 			}
-			if (classes.indexOf("completed") != -1) {
+			if (classes.indexOf(" completed") != -1) {
 				string += 'completed ';
 			}
 			if (classes.indexOf("not-completed") != -1) {

@@ -28,7 +28,7 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 
 
 .wrapper {
-	width: 50%;
+	width: 95%;
 	margin: 1em auto;
 	max-width: 30em;
 	min-width: 20em;
@@ -268,7 +268,8 @@ p, span {	font-family: 'Source Sans Pro', sans-serif; }
 	left: 0;
 	right: 0;
 	padding: 7.5% 30% 5%;
-	background: rgba(255, 255, 255, 0.8);
+	font-size: 1.2em;
+	background: rgba(255, 255, 255, 0.9);
 	color: #3f3f3f;
 	z-index: 990;
 	overflow-y: scroll;
