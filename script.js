@@ -291,12 +291,13 @@ $(document).ready(function() {
 
 			// console.log(timeLogged);
 			var prettyTime = timeLogged / 1000;
-			if (prettyTime > 60) {
-				var prettyMinutes = (prettyTime / 60).toFixed(2);
-				$(clokan).text('paused at  ' + prettyMinutes + ' minutes');
-			} else if (prettyTime > 3600) {
+			console.log(prettyTime);
+			if (prettyTime > 3600) {
 				prettyHour = (prettyTime / 3600).toFixed(2);
 				$(clokan).text('paused at  ' + prettyHours + ' hours');
+			} else if (prettyTime > 60) {
+				var prettyMinutes = (prettyTime / 60).toFixed(2);
+				$(clokan).text('paused at  ' + prettyMinutes + ' minutes');
 			} else {
 				$(clokan).text('paused at  ' + ((prettyTime).toFixed(2)) + ' seconds');
 			}
